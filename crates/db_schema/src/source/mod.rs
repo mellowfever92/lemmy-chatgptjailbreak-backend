@@ -4,6 +4,7 @@ use url::Url;
 #[cfg(feature = "full")]
 pub mod activity;
 pub mod actor_language;
+pub mod badge;
 pub mod captcha_answer;
 pub mod combined;
 pub mod comment;
