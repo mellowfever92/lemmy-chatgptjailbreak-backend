@@ -1,6 +1,7 @@
 use lemmy_api_utils::context::LemmyContext;
 use lemmy_db_schema::source::community::{Community, CommunityActions};
 
+pub mod badge;
 pub mod comment;
 pub mod community;
 pub mod custom_emoji;
