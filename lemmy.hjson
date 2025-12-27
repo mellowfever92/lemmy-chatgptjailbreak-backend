@@ -1,0 +1,15 @@
+{
+  hostname: "localhost:8537"
+  bind: "0.0.0.0"
+  port: 8536
+  tls_enabled: false
+  
+  database: {
+    connection: "postgres://lemmy_dev:devpassword@postgres-dev:5432/lemmy"
+  }  
+  setup: {
+    admin_username: "admin"
+    admin_password: "ChatGPTSucksAss"
+    site_name: "ChatGPTJailbreak Dev"
+  }
+}

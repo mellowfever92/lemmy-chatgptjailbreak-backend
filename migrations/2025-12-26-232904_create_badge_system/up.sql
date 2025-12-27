@@ -6,8 +6,8 @@ CREATE TABLE badge (
     image_url text NOT NULL,
     is_assignable_by_mods boolean NOT NULL DEFAULT FALSE,
     is_self_selectable boolean NOT NULL DEFAULT FALSE,
-    published timestamp without time zone DEFAULT now() NOT NULL,
-    updated timestamp without time zone
+    published timestamptz NOT NULL DEFAULT now(),
+    updated timestamptz
 );
 
 -- Create user_badge junction table for badge assignments
@@ -15,7 +15,7 @@ CREATE TABLE person_badge (
     id serial PRIMARY KEY,
     person_id int REFERENCES person ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
     badge_id int REFERENCES badge ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
-    assigned_at timestamp without time zone DEFAULT now() NOT NULL,
+    assigned_at timestamptz NOT NULL DEFAULT now(),
     assigned_by int REFERENCES person ON UPDATE CASCADE ON DELETE SET NULL,
     UNIQUE (person_id, badge_id)
 );
