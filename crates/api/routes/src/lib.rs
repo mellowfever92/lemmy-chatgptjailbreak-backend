@@ -118,6 +118,14 @@ use lemmy_api_crud::{
     remove::remove_community,
     update::update_community,
   },
+  badge::{
+    assign::assign_badge,
+    create::create_badge,
+    delete::delete_badge,
+    list::list_badges,
+    remove::remove_badge,
+    update::update_badge,
+  },
   custom_emoji::{
     create::create_custom_emoji,
     delete::delete_custom_emoji,
@@ -440,6 +448,15 @@ pub fn config(cfg: &mut ServiceConfig, rate_limit: &RateLimit) {
               .route("/block", post().to(admin_block_instance))
               .route("/allow", post().to(admin_allow_instance)),
           ),
+      )
+      .service(
+        scope("/badge")
+          .route("", post().to(create_badge))
+          .route("", put().to(update_badge))
+          .route("", delete().to(delete_badge))
+          .route("/list", get().to(list_badges))
+          .route("/assign", post().to(assign_badge))
+          .route("/remove", post().to(remove_badge)),
       )
       .service(
         scope("/custom_emoji")
