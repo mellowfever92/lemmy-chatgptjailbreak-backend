@@ -63,6 +63,20 @@ pub mod sql_types {
 }
 
 diesel::table! {
+    badge (id) {
+        id -> Int4,
+        #[max_length = 64]
+        name -> Varchar,
+        description -> Nullable<Text>,
+        image_url -> Text,
+        is_assignable_by_mods -> Bool,
+        is_self_selectable -> Bool,
+        published -> Timestamptz,
+        updated -> Nullable<Timestamptz>,
+    }
+}
+
+diesel::table! {
     captcha_answer (uuid) {
         uuid -> Uuid,
         answer -> Text,
@@ -676,6 +690,16 @@ diesel::table! {
 }
 
 diesel::table! {
+    person_badge (id) {
+        id -> Int4,
+        person_id -> Int4,
+        badge_id -> Int4,
+        assigned_at -> Timestamptz,
+        assigned_by -> Nullable<Int4>,
+    }
+}
+
+diesel::table! {
     person_content_combined (id) {
         published_at -> Timestamptz,
         post_id -> Nullable<Int4>,
@@ -974,6 +998,8 @@ diesel::joinable!(federation_allowlist -> instance (instance_id));
 diesel::joinable!(federation_blocklist -> instance (instance_id));
 diesel::joinable!(federation_queue_state -> instance (instance_id));
 diesel::joinable!(instance_actions -> instance (instance_id));
+diesel::joinable!(person_badge -> badge (badge_id));
+diesel::joinable!(person_badge -> person (person_id));
 diesel::joinable!(instance_actions -> person (person_id));
 diesel::joinable!(local_image -> person (person_id));
 diesel::joinable!(local_image -> post (thumbnail_for_post_id));
@@ -1065,6 +1091,7 @@ diesel::allow_tables_to_appear_in_same_query!(
   oauth_provider,
   password_reset_request,
   person,
+  person_badge,
   person_content_combined,
   person_liked_combined,
   person_saved_combined,
@@ -1083,4 +1110,5 @@ diesel::allow_tables_to_appear_in_same_query!(
   person_actions,
   image_details,
 );
+diesel::allow_tables_to_appear_in_same_query!(badge, person_badge,);
 diesel::allow_tables_to_appear_in_same_query!(custom_emoji, custom_emoji_keyword,);
