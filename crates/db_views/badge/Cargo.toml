@@ -1,0 +1,36 @@
+[package]
+name = "lemmy_db_views_badge"
+version.workspace = true
+edition.workspace = true
+description.workspace = true
+license.workspace = true
+homepage.workspace = true
+documentation.workspace = true
+repository.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+lemmy_db_schema.workspace = true
+lemmy_db_schema_file.workspace = true
+lemmy_diesel_utils.workspace = true
+lemmy_utils.workspace = true
+diesel.workspace = true
+diesel-async.workspace = true
+serde.workspace = true
+serde_with.workspace = true
+
+[package.metadata.cargo-machete]
+ignored = ["lemmy_db_schema_file"]
+
+[features]
+default = ["full"]
+full = [
+  "lemmy_db_schema/full",
+  "lemmy_db_schema_file/full",
+  "lemmy_diesel_utils/full",
+  "diesel",
+  "diesel-async",
+]
+ts-rs = ["lemmy_db_schema/ts-rs"]
