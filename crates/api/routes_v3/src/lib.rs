@@ -32,6 +32,7 @@ use actix_web::{guard, web::*};
 use lemmy_api::local_user::donation_dialog_shown::donation_dialog_shown;
 use lemmy_utils::rate_limit::RateLimit;
 
+mod badge_handlers;
 mod convert;
 mod handlers;
 
@@ -115,6 +116,17 @@ pub fn config(cfg: &mut ServiceConfig, rate_limit: &RateLimit) {
             post().to(mark_all_notifications_read_v3),
           )
           .route("/donation_dialog_shown", post().to(donation_dialog_shown)),
+      )
+      // Badge routes
+      .service(
+        scope("/badge")
+          .wrap(rate_limit.message())
+          .route("", get().to(badge_handlers::list_badges_v3))
+          .route("", post().to(badge_handlers::create_badge_v3))
+          .route("", put().to(badge_handlers::update_badge_v3))
+          .route("", delete().to(badge_handlers::delete_badge_v3))
+          .route("/assign", post().to(badge_handlers::assign_badge_v3))
+          .route("/remove", post().to(badge_handlers::remove_badge_v3)),
       ),
   );
 }

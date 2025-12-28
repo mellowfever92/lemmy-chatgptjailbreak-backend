@@ -252,6 +252,7 @@ pub struct PostSavedForm {
 #[derive(derive_new::new, Clone)]
 #[cfg_attr(feature = "full", derive(Insertable, AsChangeset))]
 #[cfg_attr(feature = "full", diesel(table_name = post_actions))]
+#[allow(dead_code)]
 pub(crate) struct PostReadForm {
   pub post_id: PostId,
   pub person_id: PersonId,

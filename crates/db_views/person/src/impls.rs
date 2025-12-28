@@ -3,7 +3,7 @@ use diesel::{ExpressionMethods, QueryDsl, SelectableHelper};
 use diesel_async::RunQueryDsl;
 use i_love_jesus::SortDirection;
 use lemmy_db_schema::{
-  source::{badge::{Badge, PersonBadge}, person::{Person, person_keys as key}},
+  source::person::{Person, person_keys as key},
   utils::limit_fetch,
 };
 use lemmy_db_schema_file::{
@@ -14,7 +14,7 @@ use lemmy_db_schema_file::{
     creator_local_instance_actions_join,
     my_person_actions_join,
   },
-  schema::{badge, local_user, person, person_badge},
+  schema::{local_user, person},
 };
 use lemmy_diesel_utils::{
   connection::{DbPool, get_conn},
@@ -75,26 +75,12 @@ impl PersonView {
       query = query.filter(person::deleted.eq(false))
     }
 
-    let mut person_view = query
+    let person_view = query
       .first(conn)
       .await
       .with_lemmy_type(LemmyErrorType::NotFound)?;
 
-    // Load badges for this person
-    person_view.badges = Self::load_badges(pool, person_id).await?;
-
     Ok(person_view)
-  }
-
-  pub async fn load_badges(pool: &mut DbPool<'_>, person_id: PersonId) -> LemmyResult<Vec<Badge>> {
-    let conn = &mut get_conn(pool).await?;
-    person_badge::table
-      .inner_join(badge::table)
-      .filter(person_badge::person_id.eq(person_id))
-      .select(Badge::as_select())
-      .load::<Badge>(conn)
-      .await
-      .with_lemmy_type(LemmyErrorType::CouldntFind)
   }
 }
 
@@ -136,12 +122,7 @@ impl PersonQuery {
         .then_order_by(key::id);
 
     let conn = &mut get_conn(pool).await?;
-    let mut res = paginated_query.load::<PersonView>(conn).await?;
-
-    // Load badges for all persons
-    for person_view in &mut res {
-      person_view.badges = PersonView::load_badges(pool, person_view.person.id).await?;
-    }
+    let res = paginated_query.load::<PersonView>(conn).await?;
 
     paginate_response(res, limit, self.page_cursor)
   }

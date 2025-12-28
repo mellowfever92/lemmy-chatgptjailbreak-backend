@@ -23,6 +23,7 @@ default = []
 lemmy_api = { workspace = true }
 lemmy_api_crud = { workspace = true }
 lemmy_db_schema = { workspace = true }
+lemmy_db_views_badge = { workspace = true }
 lemmy_db_views_site = { workspace = true }
 lemmy_db_views_post = { workspace = true }
 lemmy_utils = { workspace = true }

@@ -3412,6 +3412,7 @@ dependencies = [
  "lemmy_apub_objects",
  "lemmy_db_schema 1.0.0-alpha.12",
  "lemmy_db_schema_file",
+ "lemmy_db_views_badge",
  "lemmy_db_views_comment",
  "lemmy_db_views_community",
  "lemmy_db_views_community_follower",
@@ -3460,6 +3461,7 @@ dependencies = [
  "lemmy_api_utils",
  "lemmy_db_schema 1.0.0-alpha.12",
  "lemmy_db_schema_file",
+ "lemmy_db_views_badge",
  "lemmy_db_views_comment",
  "lemmy_db_views_community",
  "lemmy_db_views_local_user",
@@ -3750,6 +3752,20 @@ dependencies = [
  "serde",
  "serde_with",
  "strum 0.26.3",
+]
+
+[[package]]
+name = "lemmy_db_views_badge"
+version = "1.0.0-alpha.12"
+dependencies = [
+ "diesel",
+ "diesel-async",
+ "lemmy_db_schema 1.0.0-alpha.12",
+ "lemmy_db_schema_file",
+ "lemmy_diesel_utils",
+ "lemmy_utils 1.0.0-alpha.12",
+ "serde",
+ "serde_with",
 ]
 
 [[package]]

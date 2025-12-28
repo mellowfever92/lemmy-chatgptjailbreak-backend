@@ -147,6 +147,7 @@ pub struct CommentActions {
   derive(Insertable, AsChangeset, Serialize, Deserialize)
 )]
 #[cfg_attr(feature = "full", diesel(table_name = comment_actions))]
+#[allow(dead_code)]
 pub struct CommentLikeForm {
   person_id: PersonId,
   comment_id: CommentId,

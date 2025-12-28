@@ -1,4 +1,5 @@
-use crate::newtypes::{BadgeId, PersonBadgeId, PersonId};
+use crate::newtypes::{BadgeId, PersonBadgeId};
+use lemmy_db_schema_file::PersonId;
 use chrono::{DateTime, Utc};
 #[cfg(feature = "full")]
 use lemmy_db_schema_file::schema::{badge, person_badge};

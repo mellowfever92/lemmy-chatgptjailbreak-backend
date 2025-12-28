@@ -1,5 +1,5 @@
 use chrono::{DateTime, Utc};
-use lemmy_db_schema::source::{badge::Badge, person::{Person, PersonActions}};
+use lemmy_db_schema::source::person::{Person, PersonActions};
 use serde::{Deserialize, Serialize};
 #[cfg(feature = "full")]
 use {
@@ -48,6 +48,4 @@ pub struct PersonView {
      )
   )]
   pub ban_expires_at: Option<DateTime<Utc>>,
-  #[cfg_attr(feature = "full", diesel(skip))]
-  pub badges: Vec<Badge>,
 }

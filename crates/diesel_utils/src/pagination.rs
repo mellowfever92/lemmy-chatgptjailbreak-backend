@@ -1,9 +1,5 @@
 use serde::{Deserialize, Serialize};
 use serde_with::skip_serializing_none;
-use std::{
-  ops::{Deref, DerefMut},
-  sync::LazyLock,
-};
 #[cfg(feature = "full")]
 use {
   crate::connection::DbPool,
@@ -16,6 +12,8 @@ use {
   itertools::Itertools,
   lemmy_utils::error::LemmyErrorType,
   lemmy_utils::error::LemmyResult,
+  std::ops::{Deref, DerefMut},
+  std::sync::LazyLock,
 };
 
 /// Use base 64 engine with custom alphabet based on base64::engine::general_purpose::URL_SAFE
@@ -165,6 +163,7 @@ impl PaginationCursor {
 /// Uses serde rename to keep the cursor string short.
 #[skip_serializing_none]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
+#[allow(dead_code)]
 struct PaginationCursorInternal {
   #[serde(rename = "b")]
   back: bool,

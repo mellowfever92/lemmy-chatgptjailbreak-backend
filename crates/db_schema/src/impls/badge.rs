@@ -1,7 +1,8 @@
 use crate::{
-  newtypes::{BadgeId, PersonBadgeId, PersonId},
+  newtypes::BadgeId,
   source::badge::{Badge, BadgeInsertForm, BadgeUpdateForm, PersonBadge, PersonBadgeInsertForm},
 };
+use lemmy_db_schema_file::PersonId;
 use diesel::{dsl::insert_into, ExpressionMethods, QueryDsl};
 use diesel_async::RunQueryDsl;
 use lemmy_db_schema_file::schema::{
@@ -30,11 +31,11 @@ impl Crud for Badge {
 
   async fn update(
     pool: &mut DbPool<'_>,
-    badge_id: Self::IdType,
+    id: Self::IdType,
     new_badge: &Self::UpdateForm,
   ) -> LemmyResult<Self> {
     let conn = &mut get_conn(pool).await?;
-    diesel::update(badge.find(badge_id))
+    diesel::update(badge.filter(badge_id_col.eq(id)))
       .set(new_badge)
       .get_result::<Self>(conn)
       .await
@@ -43,21 +44,21 @@ impl Crud for Badge {
 }
 
 impl Badge {
-  pub async fn read(pool: &mut DbPool<'_>, badge_id: BadgeId) -> LemmyResult<Self> {
+  pub async fn read(pool: &mut DbPool<'_>, id: BadgeId) -> LemmyResult<Self> {
     let conn = &mut get_conn(pool).await?;
     badge
-      .find(badge_id)
+      .filter(badge_id_col.eq(id))
       .first::<Self>(conn)
       .await
-      .with_lemmy_type(LemmyErrorType::CouldntFind)
+      .with_lemmy_type(LemmyErrorType::CouldntUpdate)
   }
 
-  pub async fn delete(pool: &mut DbPool<'_>, badge_id: BadgeId) -> LemmyResult<usize> {
+  pub async fn delete(pool: &mut DbPool<'_>, id: BadgeId) -> LemmyResult<usize> {
     let conn = &mut get_conn(pool).await?;
-    diesel::delete(badge.find(badge_id))
+    diesel::delete(badge.filter(badge_id_col.eq(id)))
       .execute(conn)
       .await
-      .with_lemmy_type(LemmyErrorType::CouldntDelete)
+      .with_lemmy_type(LemmyErrorType::CouldntUpdate)
   }
 
   pub async fn list(pool: &mut DbPool<'_>) -> LemmyResult<Vec<Self>> {
@@ -66,7 +67,7 @@ impl Badge {
       .order(badge_id_col.asc())
       .load::<Self>(conn)
       .await
-      .with_lemmy_type(LemmyErrorType::CouldntFind)
+      .with_lemmy_type(LemmyErrorType::CouldntUpdate)
   }
 }
 
@@ -93,7 +94,7 @@ impl PersonBadge {
     )
     .execute(conn)
     .await
-    .with_lemmy_type(LemmyErrorType::CouldntDelete)
+    .with_lemmy_type(LemmyErrorType::CouldntUpdate)
   }
 
   pub async fn list_for_person(
@@ -105,6 +106,6 @@ impl PersonBadge {
       .filter(person_id.eq(for_person_id))
       .load::<Self>(conn)
       .await
-      .with_lemmy_type(LemmyErrorType::CouldntFind)
+      .with_lemmy_type(LemmyErrorType::CouldntUpdate)
   }
 }

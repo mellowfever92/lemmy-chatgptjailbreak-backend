@@ -41,6 +41,7 @@ pub struct Modlog {
 #[derive(derive_new::new)]
 #[cfg_attr(feature = "full", derive(Insertable))]
 #[cfg_attr(feature = "full", diesel(table_name = modlog))]
+#[allow(dead_code)]
 pub struct ModlogInsertForm<'a> {
   pub(crate) kind: ModlogKind,
   pub(crate) is_revert: bool,

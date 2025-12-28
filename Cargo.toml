@@ -50,6 +50,7 @@ members = [
   "crates/db_views/report_combined_sql",
   "crates/db_views/search_combined",
   "crates/db_views/site",
+  "crates/db_views/badge",
   "crates/api/api",
   "crates/api/api_crud",
   "crates/api/api_common",
@@ -132,6 +133,7 @@ lemmy_db_views_report_combined = { version = "=1.0.0-alpha.12", path = "./crates
 lemmy_db_views_report_combined_sql = { version = "=1.0.0-alpha.12", path = "./crates/db_views/report_combined_sql" }
 lemmy_db_views_search_combined = { version = "=1.0.0-alpha.12", path = "./crates/db_views/search_combined" }
 lemmy_db_views_site = { version = "=1.0.0-alpha.12", path = "./crates/db_views/site" }
+lemmy_db_views_badge = { version = "=1.0.0-alpha.12", path = "./crates/db_views/badge" }
 lemmy_db_views_vote = { version = "=1.0.0-alpha.12", path = "./crates/db_views/vote" }
 activitypub_federation = { git = "https://github.com/LemmyNet/activitypub-federation-rust.git", default-features = false, features = [
   "actix-web",

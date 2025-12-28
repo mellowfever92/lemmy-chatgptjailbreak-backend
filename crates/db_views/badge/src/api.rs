@@ -1,4 +1,5 @@
-use lemmy_db_schema::newtypes::{BadgeId, PersonId};
+use lemmy_db_schema::newtypes::BadgeId;
+use lemmy_db_schema_file::PersonId;
 use lemmy_diesel_utils::dburl::DbUrl;
 use serde::{Deserialize, Serialize};
 
