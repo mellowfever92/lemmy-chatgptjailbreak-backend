@@ -126,7 +126,8 @@ pub fn config(cfg: &mut ServiceConfig, rate_limit: &RateLimit) {
           .route("", put().to(badge_handlers::update_badge_v3))
           .route("", delete().to(badge_handlers::delete_badge_v3))
           .route("/assign", post().to(badge_handlers::assign_badge_v3))
-          .route("/remove", post().to(badge_handlers::remove_badge_v3)),
+          .route("/remove", post().to(badge_handlers::remove_badge_v3))
+          .route("/person/{person_id}", get().to(badge_handlers::get_person_badges_v3)),
       ),
   );
 }

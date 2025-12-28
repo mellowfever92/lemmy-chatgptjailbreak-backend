@@ -1,5 +1,6 @@
-use lemmy_db_schema::{newtypes::BadgeId, source::badge::Badge};
-use lemmy_db_schema_file::schema::badge as badge_schema;
+use lemmy_db_schema::{newtypes::BadgeId, source::badge::{Badge, PersonBadge}};
+use lemmy_db_schema_file::schema::{badge as badge_schema, person_badge};
+use lemmy_db_schema_file::PersonId;
 use lemmy_diesel_utils::connection::{DbPool, get_conn};
 use lemmy_utils::error::LemmyResult;
 use diesel::prelude::*;
@@ -44,6 +45,22 @@ impl BadgeView {
       .await?;
       
     Ok(Self::from_badge(badge_obj))
+  }
+
+  /// Get all badges assigned to a specific person
+  pub async fn list_for_person(pool: &mut DbPool<'_>, person_id_param: PersonId) -> LemmyResult<Vec<(Self, PersonBadge)>> {
+    use badge_schema::dsl::*;
+    
+    let conn = &mut get_conn(pool).await?;
+    let results = person_badge::table
+      .inner_join(badge)
+      .filter(person_badge::person_id.eq(person_id_param))
+      .order_by(person_badge::assigned_at.desc())
+      .select((Badge::as_select(), PersonBadge::as_select()))
+      .load::<(Badge, PersonBadge)>(conn)
+      .await?;
+      
+    Ok(results.into_iter().map(|(b, pb)| (Self::from_badge(b), pb)).collect())
   }
 }
 

@@ -85,3 +85,22 @@ pub struct RemoveBadge {
 pub struct BadgeActionResponse {
   pub success: bool,
 }
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[cfg_attr(feature = "ts-rs", derive(ts_rs::TS))]
+#[cfg_attr(feature = "ts-rs", ts(optional_fields, export))]
+/// A badge with assignment metadata.
+pub struct AssignedBadge {
+  #[serde(flatten)]
+  pub badge: BadgeView,
+  pub assigned_at: String,
+  pub assigned_by: Option<PersonId>,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[cfg_attr(feature = "ts-rs", derive(ts_rs::TS))]
+#[cfg_attr(feature = "ts-rs", ts(optional_fields, export))]
+/// Response containing a person's badges.
+pub struct PersonBadgesResponse {
+  pub badges: Vec<AssignedBadge>,
+}

@@ -10,12 +10,14 @@ use lemmy_db_schema::source::badge::{
 use lemmy_db_views_badge::{
   api::{
     AssignBadge,
+    AssignedBadge,
     BadgeActionResponse,
     BadgeResponse,
     CreateBadge,
     DeleteBadge,
     EditBadge,
     ListBadgesResponse,
+    PersonBadgesResponse,
     RemoveBadge,
   },
   BadgeView,
@@ -128,4 +130,21 @@ pub(crate) async fn remove_badge_v3(
   PersonBadge::delete(&mut context.pool(), data.person_id, data.badge_id).await?;
 
   Ok(HttpResponse::Ok().json(BadgeActionResponse { success: true }))
+}
+
+pub(crate) async fn get_person_badges_v3(
+  person_id: Path<i32>,
+  context: Data<LemmyContext>,
+) -> LemmyResult<Json<PersonBadgesResponse>> {
+  let badges = BadgeView::list_for_person(&mut context.pool(), (*person_id).into()).await?;
+  
+  let assigned_badges: Vec<AssignedBadge> = badges.into_iter().map(|(badge_view, person_badge)| {
+    AssignedBadge {
+      badge: badge_view,
+      assigned_at: person_badge.assigned_at.to_rfc3339(),
+      assigned_by: person_badge.assigned_by,
+    }
+  }).collect();
+
+  Ok(Json(PersonBadgesResponse { badges: assigned_badges }))
 }
